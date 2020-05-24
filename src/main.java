@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class main {
@@ -67,18 +64,57 @@ public class main {
 
     }
 
-    public static void main(String[] args){
-        String fichier="crd301.mst";
-        String s="src/"+fichier;
-        Graph g=EcritureGraphe(s);
-        g.Kruskal1();
-        g.Kruskal2();
-        g.Prim();
-        g.dMST(2);
-        g.afficher();
-        Stack pile= new Stack();
-        for(int i=0; i<20; i++){
-            if(i%2==0) pile.push(i);
+    public static void main(String[] args) {
+        String fichier = "C:\\Users\\loko6\\IdeaProjects\\Graphe_TP2\\src\\Arbres";
+
+        File file = new File(fichier);
+        File[] files = file.listFiles();
+        long start;
+        long end;
+
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("C:\\Users\\loko6\\IdeaProjects\\Graphe_TP2\\src" + "resultats" + ".csv", "UTF-8");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        for (int i = 0; i < files.length; i++) { //Parcour tout les fichiers
+            try {
+                System.out.println(files[i].getName());
+                String s = fichier + "\\" + files[i].getName();
+                Graph g = EcritureGraphe(s);
+
+                start = System.currentTimeMillis();
+                g.Kruskal1();
+                end = System.currentTimeMillis();
+                long T_k1 = end - start;
+
+                start = System.currentTimeMillis();
+                g.Kruskal2();
+                end = System.currentTimeMillis();
+                long T_k2 = end - start;
+
+                start = System.currentTimeMillis();
+                g.Prim();
+                end = System.currentTimeMillis();
+                long T_Pr = end - start;
+
+                start = System.currentTimeMillis();
+                g.dMST(2);
+                end = System.currentTimeMillis();
+                long T_dMST2 = end - start;
+
+                int[] res = g.afficher();
+                writer.println(files[i].getName() + ";" + res[0] + ";" + T_k1 + ";" + res[1] + ";" + T_k2 + ";" + res[2] + ";" + T_Pr + ";" + res[3] + ";" + T_dMST2);
+            } catch (NullPointerException e) {
+                System.out.println("Erreur sur le fichier : " + files[i].getName() + "\n" + e);
+            } catch (Exception e) {
+                System.out.println("Erreur sur le fichier : " + files[i].getName() + "\n" + e);
+            }
+        }
+        writer.close();
+        System.out.println("Fin du traitement");
     }
 }

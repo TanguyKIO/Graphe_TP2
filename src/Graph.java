@@ -161,7 +161,7 @@ public class Graph {
         if(x.getParent()==null){
             return x;
         }
-        return x.getParent();
+        return find(x.getParent());
     }
 
     private void union (Sommet x, Sommet y){
@@ -170,7 +170,7 @@ public class Graph {
         }
     }
 
-    public void afficher(){
+    public int[] afficher(){
         int s_k1=0;
         int s_k2=0;
         int s_p=0;
@@ -195,9 +195,12 @@ public class Graph {
             l++;
             s_d+=a.getPoids();
         }
+
         System.out.println("Kruskal1 : "+s_k1);
         System.out.println("Kruskal2 : "+s_k2);
         System.out.println("Prim : "+s_p);
         System.out.println("d-MST : "+s_d);
+        int[] res = { s_k1, s_k2, s_p,s_d};
+        return res;
     }
 }
